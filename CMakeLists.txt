@@ -141,4 +141,18 @@ IF( QWT_EXAMPLES )
     examples/refreshtest/main.cpp
   )
   TARGET_LINK_LIBRARIES( refreshtest qwt )
+
+  ADD_EXECUTABLE( controls
+    examples/controls/sliderbox.cpp
+    examples/controls/slidertab.cpp
+    examples/controls/wheelbox.cpp
+    examples/controls/wheeltab.cpp
+    examples/controls/knobbox.cpp
+    examples/controls/knobtab.cpp
+    examples/controls/dialbox.cpp
+    examples/controls/dialtab.cpp
+    examples/controls/main.cpp
+  )
+  TARGET_LINK_LIBRARIES( controls qwt )
+
 ENDIF()
