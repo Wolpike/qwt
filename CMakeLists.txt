@@ -4,6 +4,7 @@ PROJECT( qwt )
 OPTION( QWT_PLOT "Enable QwtPlot" ON )
 OPTION( QWT_WIDGETS "Enable QwtWidgets" ON )
 OPTION( QWT_EXAMPLES "Enable QwtExamples" OFF )
+OPTION( QWT_PLAYGROUND "Enable QwtPlayground" OFF )
 
 SET( CMAKE_CXX_STANDARD 11 )
 SET( CMAKE_INCLUDE_CURRENT_DIR ON )
@@ -316,5 +317,68 @@ IF( QWT_EXAMPLES )
       examples/controls/main.cpp
     )
     TARGET_LINK_LIBRARIES( controls qwt )
+  ENDIF()
+ENDIF()
+
+IF( QWT_PLAYGROUND )
+  IF( QWT_PLOT )
+    ADD_EXECUTABLE( curvetracker
+      playground/curvetracker/curvetracker.cpp
+      playground/curvetracker/plot.cpp
+      playground/curvetracker/main.cpp
+    )
+    TARGET_LINK_LIBRARIES( curvetracker qwt )
+
+    ADD_EXECUTABLE( graphicscale
+      playground/graphicscale/canvas.cpp
+      playground/graphicscale/main.cpp
+      playground/graphicscale/mainwindow.cpp
+    )
+    TARGET_LINK_LIBRARIES( graphicscale qwt )
+
+    ADD_EXECUTABLE( plotmatrix
+      playground/plotmatrix/plotmatrix.cpp
+      playground/plotmatrix/main.cpp
+    )
+    TARGET_LINK_LIBRARIES( plotmatrix qwt )
+
+    ADD_EXECUTABLE( rescaler
+      playground/rescaler/plot.cpp
+      playground/rescaler/main.cpp
+      playground/rescaler/mainwindow.cpp
+    )
+    TARGET_LINK_LIBRARIES( rescaler qwt )
+
+    ADD_EXECUTABLE( scaleengine
+      playground/scaleengine/plot.cpp
+      playground/scaleengine/mainwindow.cpp
+      playground/scaleengine/scaleengine.cpp
+      playground/scaleengine/transformplot.cpp
+    )
+    TARGET_LINK_LIBRARIES( scaleengine qwt )
+
+    ADD_EXECUTABLE( shapes
+      playground/shapes/shapes.cpp
+    )
+    TARGET_LINK_LIBRARIES( shapes qwt )
+
+    ADD_EXECUTABLE( symbols
+      playground/symbols/symbols.cpp
+    )
+    TARGET_LINK_LIBRARIES( symbols qwt )
+
+    ADD_EXECUTABLE( timescale
+      playground/timescale/plot.cpp
+      playground/timescale/panel.cpp
+      playground/timescale/main.cpp
+      playground/timescale/mainwindow.cpp
+    )
+    TARGET_LINK_LIBRARIES( timescale qwt )
+
+    ADD_EXECUTABLE( svgmap
+      playground/svgmap/plot.cpp
+      playground/svgmap/main.cpp
+    )
+    TARGET_LINK_LIBRARIES( svgmap qwt )
   ENDIF()
 ENDIF()
