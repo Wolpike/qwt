@@ -3,7 +3,7 @@ PROJECT( qwt )
 
 OPTION( QWT_PLOT "Enable QwtPlot" ON )
 OPTION( QWT_WIDGETS "Enable QwtWidgets" ON )
-OPTION( QWT_EXAMPLES "Enable QwtExamples" ON )
+OPTION( QWT_EXAMPLES "Enable QwtExamples" OFF )
 
 SET( CMAKE_CXX_STANDARD 11 )
 SET( CMAKE_INCLUDE_CURRENT_DIR ON )
@@ -133,26 +133,188 @@ TARGET_LINK_LIBRARIES( qwt PUBLIC
 TARGET_INCLUDE_DIRECTORIES( qwt INTERFACE src )
 
 IF( QWT_EXAMPLES )
-  ADD_EXECUTABLE( refreshtest
-    examples/refreshtest/circularbuffer.cpp
-    examples/refreshtest/panel.cpp
-    examples/refreshtest/plot.cpp
-    examples/refreshtest/mainwindow.cpp
-    examples/refreshtest/main.cpp
-  )
-  TARGET_LINK_LIBRARIES( refreshtest qwt )
+  IF( QWT_PLOT )
+    ADD_EXECUTABLE( animation
+      examples/animation/plot.cpp
+      examples/animation/main.cpp
+    )
+    TARGET_LINK_LIBRARIES( animation qwt )
 
-  ADD_EXECUTABLE( controls
-    examples/controls/sliderbox.cpp
-    examples/controls/slidertab.cpp
-    examples/controls/wheelbox.cpp
-    examples/controls/wheeltab.cpp
-    examples/controls/knobbox.cpp
-    examples/controls/knobtab.cpp
-    examples/controls/dialbox.cpp
-    examples/controls/dialtab.cpp
-    examples/controls/main.cpp
-  )
-  TARGET_LINK_LIBRARIES( controls qwt )
+    ADD_EXECUTABLE( barchart
+      examples/barchart/barchart.cpp
+      examples/barchart/main.cpp
+    )
+    TARGET_LINK_LIBRARIES( barchart qwt )
 
+    ADD_EXECUTABLE( cpuplot
+      examples/cpuplot/cpuplot.cpp
+      examples/cpuplot/cpupiemarker.cpp
+      examples/cpuplot/cpustat.cpp
+    )
+    TARGET_LINK_LIBRARIES( cpuplot qwt )
+
+    ADD_EXECUTABLE( curvdemo1
+      examples/curvdemo1/curvdemo1.cpp
+    )
+    TARGET_LINK_LIBRARIES( curvdemo1 qwt )
+
+    ADD_EXECUTABLE( distrowatch
+      examples/distrowatch/main.cpp
+      examples/distrowatch/barchart.cpp
+    )
+    TARGET_LINK_LIBRARIES( distrowatch qwt )
+
+    ADD_EXECUTABLE( friedberg
+      examples/friedberg/main.cpp
+      examples/friedberg/plot.cpp
+      examples/friedberg/friedberg2007.cpp
+    )
+    TARGET_LINK_LIBRARIES( friedberg qwt )
+
+    ADD_EXECUTABLE( itemeditor
+      examples/itemeditor/main.cpp
+      examples/itemeditor/plot.cpp
+      examples/itemeditor/editor.cpp
+      examples/itemeditor/shapefactory.cpp
+    )
+    TARGET_LINK_LIBRARIES( itemeditor qwt )
+
+    ADD_EXECUTABLE( legends
+      examples/legends/main.cpp
+      examples/legends/mainwindow.cpp
+      examples/legends/plot.cpp
+      examples/legends/panel.cpp
+    )
+    TARGET_LINK_LIBRARIES( legends qwt )
+
+    ADD_EXECUTABLE( rasterview
+      examples/rasterview/main.cpp
+      examples/rasterview/plot.cpp
+    )
+    TARGET_LINK_LIBRARIES( rasterview qwt )
+
+    ADD_EXECUTABLE( realtime
+      examples/realtime/main.cpp
+      examples/realtime/mainwindow.cpp
+      examples/realtime/incrementalplot.cpp
+      examples/realtime/randomplot.cpp
+      examples/realtime/scrollbar.cpp
+      examples/realtime/scrollzoomer.cpp
+    )
+    TARGET_LINK_LIBRARIES( realtime qwt )
+
+    ADD_EXECUTABLE( refreshtest
+      examples/refreshtest/circularbuffer.cpp
+      examples/refreshtest/panel.cpp
+      examples/refreshtest/plot.cpp
+      examples/refreshtest/mainwindow.cpp
+      examples/refreshtest/main.cpp
+    )
+    TARGET_LINK_LIBRARIES( refreshtest qwt )
+
+    ADD_EXECUTABLE( scatterplot
+      examples/scatterplot/main.cpp
+      examples/scatterplot/mainwindow.cpp
+      examples/scatterplot/plot.cpp
+    )
+    TARGET_LINK_LIBRARIES( scatterplot qwt )
+
+    ADD_EXECUTABLE( simpleplot
+      examples/simpleplot/simpleplot.cpp
+    )
+    TARGET_LINK_LIBRARIES( simpleplot qwt )
+
+    ADD_EXECUTABLE( sinusplot
+      examples/sinusplot/sinusplot.cpp
+    )
+    TARGET_LINK_LIBRARIES( sinusplot qwt )
+
+    ADD_EXECUTABLE( spectrogram
+      examples/spectrogram/main.cpp
+      examples/spectrogram/plot.cpp
+    )
+    TARGET_LINK_LIBRARIES( spectrogram qwt )
+
+    ADD_EXECUTABLE( stockchart
+      examples/stockchart/main.cpp
+      examples/stockchart/plot.cpp
+      examples/stockchart/griditem.cpp
+      examples/stockchart/legend.cpp
+      examples/stockchart/quotefactory.cpp
+    )
+    TARGET_LINK_LIBRARIES( stockchart qwt )
+
+    ADD_EXECUTABLE( tvplot
+      examples/tvplot/main.cpp
+      examples/tvplot/tvplot.cpp
+    )
+    TARGET_LINK_LIBRARIES( tvplot qwt )
+
+    IF( QWT_WIDGETS )
+      ADD_EXECUTABLE( event_filter
+        examples/event_filter/canvaspicker.cpp
+        examples/event_filter/colorbar.cpp
+        examples/event_filter/event_filter.cpp
+        examples/event_filter/plot.cpp
+        examples/event_filter/scalepicker.cpp
+      )
+      TARGET_LINK_LIBRARIES( event_filter qwt )
+
+      ADD_EXECUTABLE( bode
+        examples/bode/main.cpp
+        examples/bode/mainwindow.cpp
+        examples/bode/plot.cpp
+      )
+      TARGET_LINK_LIBRARIES( bode qwt )
+
+      ADD_EXECUTABLE( oscilloscope
+        examples/oscilloscope/main.cpp
+        examples/oscilloscope/curvedata.cpp
+        examples/oscilloscope/knob.cpp
+        examples/oscilloscope/mainwindow.cpp
+        examples/oscilloscope/plot.cpp
+        examples/oscilloscope/samplingthread.cpp
+        examples/oscilloscope/signaldata.cpp
+        examples/oscilloscope/wheelbox.cpp
+      )
+      TARGET_LINK_LIBRARIES( oscilloscope qwt )
+    ENDIF()
+  ENDIF()
+
+  IF( QWT_WIDGETS )
+    ADD_EXECUTABLE( radio
+      examples/radio/mainwindow.cpp
+      examples/radio/ampfrm.cpp
+      examples/radio/radio.cpp
+      examples/radio/tunerfrm.cpp
+    )
+    TARGET_LINK_LIBRARIES( radio qwt )
+
+    ADD_EXECUTABLE( sysinfo
+      examples/sysinfo/sysinfo.cpp
+    )
+    TARGET_LINK_LIBRARIES( sysinfo qwt )
+
+    ADD_EXECUTABLE( dials
+      examples/dials/dials.cpp
+      examples/dials/attitude_indicator.cpp
+      examples/dials/cockpit_grid.cpp
+      examples/dials/compass_grid.cpp
+      examples/dials/speedo_meter.cpp
+    )
+    TARGET_LINK_LIBRARIES( dials qwt )
+
+    ADD_EXECUTABLE( controls
+      examples/controls/sliderbox.cpp
+      examples/controls/slidertab.cpp
+      examples/controls/wheelbox.cpp
+      examples/controls/wheeltab.cpp
+      examples/controls/knobbox.cpp
+      examples/controls/knobtab.cpp
+      examples/controls/dialbox.cpp
+      examples/controls/dialtab.cpp
+      examples/controls/main.cpp
+    )
+    TARGET_LINK_LIBRARIES( controls qwt )
+  ENDIF()
 ENDIF()
