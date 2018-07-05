@@ -27,7 +27,8 @@ static inline double qwtMsecsForType( QwtDate::IntervalType type )
         365.0 * 24.0 * 3600.0 * 1000.0,
     };
 
-    if ( type < 0 || type >= static_cast<int>( sizeof( msecs ) / sizeof( msecs[0] ) ) )
+    if ( type < 0 || 
+         static_cast<int>(type) >= static_cast<int>( sizeof( msecs ) / sizeof( msecs[0] ) ) )
         return 1.0;
 
     return msecs[ type ];
