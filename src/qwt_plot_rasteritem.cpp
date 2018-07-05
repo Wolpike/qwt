@@ -15,11 +15,9 @@
 #include <qpainter.h>
 #include <qpaintengine.h>
 #include <qmath.h>
-#if QT_VERSION >= 0x040400
 #include <qthread.h>
 #include <qfuture.h>
 #include <qtconcurrentrun.h>
-#endif
 #include <float.h>
 
 class QwtPlotRasterItem::PrivateData
@@ -865,7 +863,7 @@ QImage QwtPlotRasterItem::compose(
     {
         QImage alphaImage( image.size(), QImage::Format_ARGB32 );
 
-#if QT_VERSION >= 0x040400 && !defined(QT_NO_QFUTURE)
+#if !defined(QT_NO_QFUTURE)
         uint numThreads = renderThreadCount();
 
         if ( numThreads <= 0 )
@@ -876,7 +874,9 @@ QImage QwtPlotRasterItem::compose(
 
         const int numRows = image.height() / numThreads;
 
-        QList< QFuture<void> > futures;
+        QVector< QFuture<void> > futures;
+        futures.reserve( numThreads - 1 );
+
         for ( uint i = 0; i < numThreads; i++ )
         {
             QRect tile( 0, i * numRows, image.width(), numRows );

@@ -95,6 +95,8 @@ void QwtPlotBarChart::setSamples(
     const QVector<double> &samples )
 {
     QVector<QPointF> points;
+    points.reserve( samples.size() );
+
     for ( int i = 0; i < samples.size(); i++ )
         points += QPointF( i, samples[ i ] );
 
@@ -244,22 +246,20 @@ void QwtPlotBarChart::drawSeries( QPainter *painter,
 }
 
 /*!
-  Draw a sample
+  Calculate the geometry of a bar in widget coordinates
 
-  \param painter Painter
   \param xMap x map
   \param yMap y map
   \param canvasRect Contents rect of the canvas
   \param boundingInterval Bounding interval of sample values
-  \param index Index of the sample
   \param sample Value of the sample
 
-  \sa drawSeries()
+  \return Geometry of the column
 */
-void QwtPlotBarChart::drawSample( QPainter *painter,
+QwtColumnRect QwtPlotBarChart::columnRect( 
     const QwtScaleMap &xMap, const QwtScaleMap &yMap,
     const QRectF &canvasRect, const QwtInterval &boundingInterval,
-    int index, const QPointF &sample ) const
+    const QPointF &sample ) const
 {
     QwtColumnRect barRect;
 
@@ -300,6 +300,30 @@ void QwtPlotBarChart::drawSample( QPainter *painter,
         barRect.vInterval = QwtInterval( y1, y2 ).normalized();
     }
 
+    return barRect;
+}
+
+/*!
+  Draw a sample
+
+  \param painter Painter
+  \param xMap x map
+  \param yMap y map
+  \param canvasRect Contents rect of the canvas
+  \param boundingInterval Bounding interval of sample values
+  \param index Index of the sample
+  \param sample Value of the sample
+
+  \sa drawSeries()
+*/
+void QwtPlotBarChart::drawSample( QPainter *painter,
+    const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+    const QRectF &canvasRect, const QwtInterval &boundingInterval,
+    int index, const QPointF &sample ) const
+{
+    const QwtColumnRect barRect = columnRect( xMap, yMap,
+        canvasRect, boundingInterval, sample );
+
     drawBar( painter, index, sample, barRect );
 }
 
@@ -329,10 +353,10 @@ void QwtPlotBarChart::drawBar( QPainter *painter,
     else
     {
         // we build a temporary default symbol
-        QwtColumnSymbol sym( QwtColumnSymbol::Box );
-        sym.setLineWidth( 1 );
-        sym.setFrameStyle( QwtColumnSymbol::Plain );
-        sym.draw( painter, rect );
+        QwtColumnSymbol columnSymbol( QwtColumnSymbol::Box );
+        columnSymbol.setLineWidth( 1 );
+        columnSymbol.setFrameStyle( QwtColumnSymbol::Plain );
+        columnSymbol.draw( painter, rect );
     }
 
     delete specialSym;
@@ -393,6 +417,10 @@ QList<QwtLegendData> QwtPlotBarChart::legendData() const
     if ( d_data->legendMode == LegendBarTitles )
     {
         const size_t numSamples = dataSize();
+#if QT_VERSION >= 0x040700
+        list.reserve( numSamples );
+#endif
+
         for ( size_t i = 0; i < numSamples; i++ )
         {
             QwtLegendData data;

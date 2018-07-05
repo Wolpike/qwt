@@ -51,6 +51,14 @@ SET( QWT_SRC
   src/qwt_text.cpp
   src/qwt_transform.cpp
   src/qwt_widget_overlay.cpp
+  src/qwt_bezier.cpp
+  src/qwt_spline_basis.cpp
+  src/qwt_spline_cubic.cpp
+  src/qwt_spline_curve_fitter.cpp
+  src/qwt_spline_local.cpp
+  src/qwt_spline_parametrization.cpp
+  src/qwt_spline_pleasing.cpp
+  src/qwt_weeding_curve_fitter.cpp
 )
 
 IF( QWT_PLOT )

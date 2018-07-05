@@ -8,7 +8,7 @@
  *****************************************************************************/
 
 #ifndef QWT_SERIES_DATA_H
-#define QWT_SERIES_DATA_H 1
+#define QWT_SERIES_DATA_H
 
 #include "qwt_global.h"
 #include "qwt_samples.h"
@@ -53,6 +53,8 @@ public:
     //! Destructor
     virtual ~QwtSeriesData();
 
+#ifndef QWT_PYTHON_WRAPPER
+
     //! \return Number of samples
     virtual size_t size() const = 0;
 
@@ -76,6 +78,13 @@ public:
        \return Bounding rectangle
      */
     virtual QRectF boundingRect() const = 0;
+
+#else
+    // Needed for generating the python bindings, but not for using them !
+    virtual size_t size() const { return 0; }
+    virtual T sample( size_t i ) const { return T(); }
+    virtual QRectF boundingRect() const { return d_boundingRect; }
+#endif
 
     /*!
        Set a the "rect of interest"
@@ -131,7 +140,7 @@ public:
        Constructor
        \param samples Array of samples
     */
-    QwtArraySeriesData( const QVector<T> &samples );
+    explicit QwtArraySeriesData( const QVector<T> &samples );
 
     /*!
       Assign an array of samples

@@ -8,7 +8,7 @@
  *****************************************************************************/
 
 #ifndef QWT_TEXT_ENGINE_H
-#define QWT_TEXT_ENGINE_H 1
+#define QWT_TEXT_ENGINE_H
 
 #include "qwt_global.h"
 #include <qsize.h>
@@ -101,6 +101,9 @@ public:
 
 protected:
     QwtTextEngine();
+
+private:
+    Q_DISABLE_COPY(QwtTextEngine)
 };
 
 

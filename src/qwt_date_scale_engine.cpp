@@ -27,8 +27,7 @@ static inline double qwtMsecsForType( QwtDate::IntervalType type )
         365.0 * 24.0 * 3600.0 * 1000.0,
     };
 
-    if ( type < 0 || 
-         static_cast<int>(type) >= static_cast<int>( sizeof( msecs ) / sizeof( msecs[0] ) ) )
+    if ( type < 0 || type >= static_cast<int>( sizeof( msecs ) / sizeof( msecs[0] ) ) )
         return 1.0;
 
     return msecs[ type ];
@@ -439,6 +438,10 @@ static QList<double> qwtDstTicks( const QDateTime &dateTime,
     }
 
     QList<double> ticks;
+#if QT_VERSION >= 0x040700
+    ticks.reserve( 3600 / secondsMinor);
+#endif
+
     for ( int i = 0; i < 3600; i += secondsMinor )
         ticks += dstMin + i * 1000.0;
 
@@ -718,7 +721,7 @@ static QwtScaleDiv qwtDivideToYears(
 class QwtDateScaleEngine::PrivateData
 {
 public:
-    PrivateData( Qt::TimeSpec spec ):
+    explicit PrivateData( Qt::TimeSpec spec ):
         timeSpec( spec ),
         utcOffset( 0 ),
         week0Type( QwtDate::FirstThursday ),

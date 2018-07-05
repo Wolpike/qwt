@@ -14,7 +14,7 @@
 class QwtRasterData::ContourPlane
 {
 public:
-    inline ContourPlane( double z ):
+    explicit inline ContourPlane( double z ):
         d_z( z )
     {
     }
@@ -155,27 +155,46 @@ inline QPointF QwtRasterData::ContourPlane::intersection(
     return QPointF( x, y );
 }
 
+class QwtRasterData::PrivateData
+{
+public:
+    QwtRasterData::Attributes attributes;
+};  
+
 //! Constructor
 QwtRasterData::QwtRasterData()
 {
+    d_data = new PrivateData();
 }
 
 //! Destructor
 QwtRasterData::~QwtRasterData()
 {
+    delete d_data;
 }
 
 /*!
-   Set the bounding interval for the x, y or z coordinates.
+  Specify an attribute of the data
 
-   \param axis Axis
-   \param interval Bounding interval
-
-   \sa interval()
+  \param attribute Attribute
+  \param on On/Off
+  /sa Attribute, testAttribute()
 */
-void QwtRasterData::setInterval( Qt::Axis axis, const QwtInterval &interval )
+void QwtRasterData::setAttribute( Attribute attribute, bool on )
 {
-    d_intervals[axis] = interval;
+    if ( on )
+        d_data->attributes |= attribute;
+    else
+        d_data->attributes &= ~attribute;
+}
+
+/*!
+    \return True, when attribute is enabled
+    \sa Attribute, setAttribute()
+*/
+bool QwtRasterData::testAttribute( Attribute attribute ) const
+{
+    return d_data->attributes & attribute;
 }
 
 /*!

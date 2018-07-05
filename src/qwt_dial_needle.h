@@ -8,7 +8,7 @@
  *****************************************************************************/
 
 #ifndef QWT_DIAL_NEEDLE_H
-#define QWT_DIAL_NEEDLE_H 1
+#define QWT_DIAL_NEEDLE_H
 
 #include "qwt_global.h"
 #include <qpalette.h>
@@ -61,6 +61,8 @@ protected:
         const QBrush &, bool sunken ) const;
 
 private:
+    Q_DISABLE_COPY(QwtDialNeedle)
+
     QPalette d_palette;
 };
 

@@ -145,6 +145,8 @@ void QwtScaleWidget::setLayoutFlag( LayoutFlag flag, bool on )
             d_data->layoutFlags |= flag;
         else
             d_data->layoutFlags &= ~flag;
+
+        update();
     }
 }
 
@@ -505,6 +507,22 @@ QRectF QwtScaleWidget::colorBarRect( const QRectF& rect ) const
     }
 
     return cr;
+}
+
+/*!
+  Change Event handler
+  \param event Change event
+
+  Invalidates internal caches if necessary
+*/
+void QwtScaleWidget::changeEvent( QEvent *event )
+{
+    if ( event->type() == QEvent::LocaleChange )
+    {
+        d_data->scaleDraw->invalidateCache();
+    }
+
+    QWidget::changeEvent( event );
 }
 
 /*!

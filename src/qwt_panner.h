@@ -8,7 +8,7 @@
  *****************************************************************************/
 
 #ifndef QWT_PANNER_H
-#define QWT_PANNER_H 1
+#define QWT_PANNER_H
 
 #include "qwt_global.h"
 #include <qwidget.h>
@@ -37,7 +37,7 @@ class QWT_EXPORT QwtPanner: public QWidget
     Q_OBJECT
 
 public:
-    QwtPanner( QWidget* parent );
+    explicit QwtPanner( QWidget* parent );
     virtual ~QwtPanner();
 
     void setEnabled( bool );

@@ -71,7 +71,7 @@ public:
     void setSpacing( double margin );
     double spacing() const;
 
-    void setPenWidth( int width );
+    void setPenWidth( int width, bool isCosmetic = false );
     int penWidth() const;
 
     virtual void draw( QPainter *, const QPalette & ) const;
@@ -94,6 +94,8 @@ public:
 
     void setMinimumExtent( double );
     double minimumExtent() const;
+
+    void invalidateCache();
 
 protected:
     /*!
@@ -125,12 +127,10 @@ protected:
     */
     virtual void drawLabel( QPainter *painter, double value ) const = 0;
 
-    void invalidateCache();
     const QwtText &tickLabel( const QFont &, double value ) const;
 
 private:
-    QwtAbstractScaleDraw( const QwtAbstractScaleDraw & );
-    QwtAbstractScaleDraw &operator=( const QwtAbstractScaleDraw & );
+    Q_DISABLE_COPY(QwtAbstractScaleDraw)
 
     class PrivateData;
     PrivateData *d_data;

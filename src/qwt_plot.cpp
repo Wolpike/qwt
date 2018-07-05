@@ -624,22 +624,6 @@ void QwtPlot::updateLayout()
                 scaleWidget->setBorderDist( startDist, endDist );
             }
 
-#if 1
-            if ( axisId == xBottom || axisId == xTop )
-            {
-                // do we need this code any longer ???
-
-                QRegion r( scaleRect[axisId] );
-                if ( axisEnabled( yLeft ) )
-                    r = r.subtracted( QRegion( scaleRect[yLeft] ) );
-                if ( axisEnabled( yRight ) )
-                    r = r.subtracted( QRegion( scaleRect[yRight] ) );
-                r.translate( -scaleRect[ axisId ].x(),
-                    -scaleRect[axisId].y() );
-
-                scaleWidget->setMask( r );
-            }
-#endif
             if ( !scaleWidget->isVisibleTo( this ) )
                 scaleWidget->show();
         }

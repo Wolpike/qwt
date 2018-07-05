@@ -23,6 +23,7 @@ public:
     PrivateData():
         spacing( 4.0 ),
         penWidth( 0 ),
+        penIsCosmetic( false ),
         minExtent( 0.0 )
     {
         components = QwtAbstractScaleDraw::Backbone 
@@ -42,6 +43,7 @@ public:
     double spacing;
     double tickLength[QwtScaleDiv::NTickTypes];
     int penWidth;
+    bool penIsCosmetic;
 
     double minExtent;
 
@@ -137,15 +139,17 @@ const QwtScaleDiv& QwtAbstractScaleDraw::scaleDiv() const
 /*!
   \brief Specify the width of the scale pen
   \param width Pen width
+  \param isCosmetic When true the scale pen will be cosmetic
+
   \sa penWidth()
 */
-void QwtAbstractScaleDraw::setPenWidth( int width )
+void QwtAbstractScaleDraw::setPenWidth( int width, bool isCosmetic )
 {
     if ( width < 0 )
         width = 0;
 
-    if ( width != d_data->penWidth )
-        d_data->penWidth = width;
+    d_data->penWidth = width;
+    d_data->penIsCosmetic = isCosmetic;
 }
 
 /*!
@@ -172,7 +176,8 @@ void QwtAbstractScaleDraw::draw( QPainter *painter,
 
     QPen pen = painter->pen();
     pen.setWidth( d_data->penWidth );
-    pen.setCosmetic( false );
+    pen.setCosmetic( d_data->penIsCosmetic );
+
     painter->setPen( pen );
 
     if ( hasComponent( QwtAbstractScaleDraw::Labels ) )
@@ -197,7 +202,7 @@ void QwtAbstractScaleDraw::draw( QPainter *painter,
     {
         painter->save();
 
-        QPen pen = painter->pen();
+        pen = painter->pen();
         pen.setColor( palette.color( QPalette::WindowText ) );
         pen.setCapStyle( Qt::FlatCap );
 
@@ -226,7 +231,7 @@ void QwtAbstractScaleDraw::draw( QPainter *painter,
     {
         painter->save();
 
-        QPen pen = painter->pen();
+        pen = painter->pen();
         pen.setColor( palette.color( QPalette::WindowText ) );
         pen.setCapStyle( Qt::FlatCap );
 
@@ -392,8 +397,8 @@ QwtText QwtAbstractScaleDraw::label( double value ) const
 const QwtText &QwtAbstractScaleDraw::tickLabel(
     const QFont &font, double value ) const
 {
-    QMap<double, QwtText>::const_iterator it = d_data->labelCache.find( value );
-    if ( it == d_data->labelCache.end() )
+    QMap<double, QwtText>::const_iterator it = d_data->labelCache.constFind( value );
+    if ( it == d_data->labelCache.constEnd() )
     {
         QwtText lbl = label( value );
         lbl.setRenderFlags( 0 );

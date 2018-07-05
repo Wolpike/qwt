@@ -159,7 +159,7 @@ QwtPickerTracker::QwtPickerTracker(
 
 QRegion QwtPickerTracker::maskHint() const
 {
-    return d_picker->trackerRect( font() );
+    return d_picker->trackerMask();
 }
 
 void QwtPickerTracker::drawOverlay( QPainter *painter ) const
@@ -515,6 +515,17 @@ QwtText QwtPicker::trackerText( const QPoint &pos ) const
             label.sprintf( "%d, %d", pos.x(), pos.y() );
     }
     return label;
+}
+
+/*!
+  Calculate the mask for the tracker overlay
+
+  \return Region with one rectangle: trackerRect( trackerFont() );
+  \sa QWidget::setMask(), trackerRect()
+*/
+QRegion QwtPicker::trackerMask() const
+{
+    return trackerRect( d_data->trackerFont );
 }
 
 /*!
@@ -1234,7 +1245,7 @@ void QwtPicker::begin()
     if ( d_data->isActive )
         return;
 
-    d_data->pickedPoints.resize( 0 );
+    d_data->pickedPoints.clear();
     d_data->isActive = true;
     Q_EMIT activated( true );
 
@@ -1280,7 +1291,7 @@ bool QwtPicker::end( bool ok )
         if ( ok )
             Q_EMIT selected( d_data->pickedPoints );
         else
-            d_data->pickedPoints.resize( 0 );
+            d_data->pickedPoints.clear();
 
         updateDisplay();
     }
@@ -1314,9 +1325,7 @@ void QwtPicker::append( const QPoint &pos )
 {
     if ( d_data->isActive )
     {
-        const int idx = d_data->pickedPoints.count();
-        d_data->pickedPoints.resize( idx + 1 );
-        d_data->pickedPoints[idx] = pos;
+        d_data->pickedPoints += pos;
 
         updateDisplay();
         Q_EMIT appended( pos );
@@ -1332,18 +1341,15 @@ void QwtPicker::append( const QPoint &pos )
 */
 void QwtPicker::move( const QPoint &pos )
 {
-    if ( d_data->isActive )
+    if ( d_data->isActive && !d_data->pickedPoints.isEmpty() )
     {
-        const int idx = d_data->pickedPoints.count() - 1;
-        if ( idx >= 0 )
+        QPoint &point = d_data->pickedPoints.last();
+        if ( point != pos )
         {
-            if ( d_data->pickedPoints[idx] != pos )
-            {
-                d_data->pickedPoints[idx] = pos;
+            point = pos;
 
-                updateDisplay();
-                Q_EMIT moved( pos );
-            }
+            updateDisplay();
+            Q_EMIT moved( pos );
         }
     }
 }
@@ -1356,19 +1362,17 @@ void QwtPicker::move( const QPoint &pos )
 */
 void QwtPicker::remove()
 {
-    if ( d_data->isActive )
+    if ( d_data->isActive && !d_data->pickedPoints.isEmpty() )
     {
-        const int idx = d_data->pickedPoints.count() - 1;
-        if ( idx > 0 )
-        {
-            const int idx = d_data->pickedPoints.count();
+#if QT_VERSION >= 0x050100
+        const QPoint pos = d_data->pickedPoints.takeLast();
+#else
+        const QPoint pos = d_data->pickedPoints.last();
+        d_data->pickedPoints.resize( d_data->pickedPoints.count() - 1 );
+#endif
 
-            const QPoint pos = d_data->pickedPoints[idx - 1];
-            d_data->pickedPoints.resize( idx - 1 );
-
-            updateDisplay();
-            Q_EMIT removed( pos );
-        }
+        updateDisplay();
+        Q_EMIT removed( pos );
     }
 }
 
@@ -1423,12 +1427,10 @@ void QwtPicker::stretchSelection( const QSize &oldSize, const QSize &newSize )
         return;
     }
 
-    const double xRatio =
-        double( newSize.width() ) / double( oldSize.width() );
-    const double yRatio =
-        double( newSize.height() ) / double( oldSize.height() );
+    const double xRatio = double( newSize.width() ) / double( oldSize.width() );
+    const double yRatio = double( newSize.height() ) / double( oldSize.height() );
 
-    for ( int i = 0; i < int( d_data->pickedPoints.count() ); i++ )
+    for ( int i = 0; i < d_data->pickedPoints.count(); i++ )
     {
         QPoint &p = d_data->pickedPoints[i];
         p.setX( qRound( p.x() * xRatio ) );

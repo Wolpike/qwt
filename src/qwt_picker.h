@@ -8,7 +8,7 @@
  *****************************************************************************/
 
 #ifndef QWT_PICKER
-#define QWT_PICKER 1
+#define QWT_PICKER
 
 #include "qwt_global.h"
 #include "qwt_text.h"
@@ -220,6 +220,7 @@ public:
     virtual void drawRubberBand( QPainter * ) const;
     virtual void drawTracker( QPainter * ) const;
 
+    virtual QRegion trackerMask() const;
     virtual QRegion rubberBandMask() const;
 
     virtual QwtText trackerText( const QPoint &pos ) const;

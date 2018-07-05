@@ -10,7 +10,7 @@
 #include "qwt_plot_shapeitem.h"
 #include "qwt_scale_map.h"
 #include "qwt_painter.h"
-#include "qwt_curve_fitter.h"
+#include "qwt_weeding_curve_fitter.h"
 #include "qwt_clipper.h"
 
 static QPainterPath qwtTransformPath( const QwtScaleMap &xMap,
@@ -21,7 +21,7 @@ static QPainterPath qwtTransformPath( const QwtScaleMap &xMap,
 
     for ( int i = 0; i < path.elementCount(); i++ )
     {
-        const QPainterPath::Element &element = path.elementAt( i );
+        const QPainterPath::Element element = path.elementAt( i );
 
         double x = xMap.transform( element.x );
         double y = yMap.transform( element.y );
@@ -52,11 +52,11 @@ static QPainterPath qwtTransformPath( const QwtScaleMap &xMap,
             }
             case QPainterPath::CurveToElement:
             {
-                const QPainterPath::Element& element1 = path.elementAt( ++i );
+                const QPainterPath::Element element1 = path.elementAt( ++i );
                 const double x1 = xMap.transform( element1.x );
                 const double y1 = yMap.transform( element1.y );
 
-                const QPainterPath::Element& element2 = path.elementAt( ++i );
+                const QPainterPath::Element element2 = path.elementAt( ++i );
                 const double x2 = xMap.transform( element2.x );
                 const double y2 = yMap.transform( element2.y );
 
@@ -408,19 +408,17 @@ void QwtPlotShapeItem::draw( QPainter *painter,
 
     if ( testPaintAttribute( QwtPlotShapeItem::ClipPolygons ) )
     {
-        qreal pw = qMax( qreal( 1.0 ), painter->pen().widthF());
-        QRectF clipRect = canvasRect.adjusted( -pw, -pw, pw, pw );
+        const qreal pw = qMax( qreal( 1.0 ), painter->pen().widthF());
+        const QRectF clipRect = canvasRect.adjusted( -pw, -pw, pw, pw );
 
         QPainterPath clippedPath;
         clippedPath.setFillRule( path.fillRule() );
 
-        const QList<QPolygonF> polygons = path.toSubpathPolygons();
+        QList<QPolygonF> polygons = path.toSubpathPolygons();
         for ( int i = 0; i < polygons.size(); i++ )
         {
-            const QPolygonF p = QwtClipper::clipPolygonF(
-                clipRect, polygons[i], true );
-
-            clippedPath.addPolygon( p );
+            QwtClipper::clipPolygonF( clipRect, polygons[i], true );
+            clippedPath.addPolygon( polygons[i] );
 
         }
 

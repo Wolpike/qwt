@@ -8,7 +8,7 @@
  *****************************************************************************/
 
 #ifndef QWT_SAMPLES_H
-#define QWT_SAMPLES_H 1
+#define QWT_SAMPLES_H
 
 #include "qwt_global.h"
 #include "qwt_interval.h"
@@ -77,7 +77,7 @@ class QWT_EXPORT QwtSetSample
 {
 public:
     QwtSetSample();
-    QwtSetSample( double, const QVector<double> & = QVector<double>() );
+    explicit QwtSetSample( double, const QVector<double> & = QVector<double>() );
 
     bool operator==( const QwtSetSample &other ) const;
     bool operator!=( const QwtSetSample &other ) const;
