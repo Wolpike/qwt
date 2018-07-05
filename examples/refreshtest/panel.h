@@ -1,5 +1,5 @@
-#ifndef _PANEL_H_
-#define _PANEL_H_ 1
+#ifndef PANEL_H
+#define PANEL_H
 
 #include "settings.h"
 #include <qtabwidget.h>
@@ -44,7 +44,7 @@ private:
     QComboBox *d_curveType;
     CheckBox *d_curveAntialiasing;
     CheckBox *d_curveClipping;
-    CheckBox *d_curveFiltering;
+    QComboBox *d_curveWeeding;
     CheckBox *d_lineSplitting;
     SpinBox  *d_curveWidth;
     QComboBox *d_curvePen;
