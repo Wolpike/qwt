@@ -11,6 +11,12 @@ SET( CMAKE_INCLUDE_CURRENT_DIR ON )
 SET( CMAKE_AUTOMOC ON )
 SET( CMAKE_AUTORCC ON )
 
+IF( NOT CMAKE_SYSTEM_NAME STREQUAL Linux )
+  FILE( TO_CMAKE_PATH $ENV{QT5_HOST} QT5_HOST )
+  SET( CMAKE_MODULE_PATH "${QT5_HOST}/lib/cmake" )
+  SET( CMAKE_PREFIX_PATH ${QT5_HOST} )
+ENDIF()
+
 FIND_PACKAGE( Qt5 COMPONENTS 
   Widgets Svg PrintSupport Concurrent OpenGL REQUIRED )
 
@@ -388,5 +394,19 @@ IF( QWT_PLAYGROUND )
       playground/svgmap/main.cpp
     )
     TARGET_LINK_LIBRARIES( svgmap qwt )
+
+    ADD_EXECUTABLE( testqwt
+      playground/testqwt/main.cpp
+      playground/testqwt/Plot.cpp
+      playground/testqwt/MainWindow.cpp
+    )
+    TARGET_LINK_LIBRARIES( testqwt qwt )
+
+    ADD_EXECUTABLE( testprint
+      playground/testprint/main.cpp
+      playground/testprint/Plot.cpp
+      playground/testprint/MainWindow.cpp
+    )
+    TARGET_LINK_LIBRARIES( testprint qwt )
   ENDIF()
 ENDIF()
