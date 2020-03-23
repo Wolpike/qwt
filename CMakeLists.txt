@@ -150,6 +150,11 @@ TARGET_COMPILE_OPTIONS( qwt PRIVATE
   -Wno-unused-function
   -Wno-deprecated-declarations
 )
+IF( CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0 )
+  TARGET_COMPILE_OPTIONS( qwt PRIVATE
+    -Wno-deprecated-copy
+  )
+ENDIF()
 
 IF( QWT_EXAMPLES )
   IF( QWT_PLOT )
