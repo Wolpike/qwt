@@ -146,6 +146,10 @@ TARGET_LINK_LIBRARIES( qwt PUBLIC
   Qt5::OpenGL
 )
 TARGET_INCLUDE_DIRECTORIES( qwt INTERFACE src )
+TARGET_COMPILE_OPTIONS( qwt PRIVATE
+  -Wno-unused-function
+  -Wno-deprecated-declarations
+)
 
 IF( QWT_EXAMPLES )
   IF( QWT_PLOT )
