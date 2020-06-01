@@ -11,6 +11,7 @@
 #include "qwt_scale_div.h"
 #include "qwt_plot.h"
 #include "qwt_painter.h"
+#include <qpainterpath.h>
 #include <qbitmap.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
@@ -25,7 +26,7 @@ static QBitmap qwtBorderMask( const QWidget *canvas, const QSize &size )
 
     QPainterPath borderPath;
 
-    ( void )QMetaObject::invokeMethod( 
+    ( void )QMetaObject::invokeMethod(
         const_cast< QWidget *>( canvas ), "borderPath", Qt::DirectConnection,
         Q_RETURN_ARG( QPainterPath, borderPath ), Q_ARG( QRect, r ) );
 
@@ -76,7 +77,7 @@ static QBitmap qwtBorderMask( const QWidget *canvas, const QSize &size )
         const QVariant borderRadius = canvas->property( "borderRadius" );
         const QVariant frameWidth = canvas->property( "frameWidth" );
 
-        if ( borderRadius.type() == QVariant::Double 
+        if ( borderRadius.type() == QVariant::Double
             && frameWidth.type() == QVariant::Int )
         {
             const double br = borderRadius.toDouble();
@@ -269,7 +270,7 @@ QBitmap QwtPlotPanner::contentsMask() const
    \return Pixmap with the content of the canvas
  */
 QPixmap QwtPlotPanner::grab() const
-{   
+{
     const QWidget *cv = canvas();
     if ( cv && cv->inherits( "QGLWidget" ) )
     {
@@ -285,5 +286,5 @@ QPixmap QwtPlotPanner::grab() const
     }
 
     return QwtPanner::grab();
-}   
+}
 

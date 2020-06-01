@@ -19,6 +19,7 @@
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpaintdevice.h>
+#include <qpainterpath.h>
 #include <qpixmap.h>
 #include <qstyle.h>
 #include <qtextdocument.h>
@@ -32,7 +33,7 @@
 #include <qwindow.h>
 #endif
 
-#if QT_VERSION < 0x050000 
+#if QT_VERSION < 0x050000
 
 #ifdef Q_WS_X11
 #include <qx11info_x11.h>
@@ -46,7 +47,7 @@ bool QwtPainter::d_roundingAlignment = true;
 static inline bool qwtIsRasterPaintEngineBuggy()
 {
 #if 0
-    static int isBuggy = -1; 
+    static int isBuggy = -1;
     if ( isBuggy < 0 )
     {
         // auto detect bug of the raster paint engine,
@@ -84,7 +85,7 @@ static inline bool qwtIsRasterPaintEngineBuggy()
 #endif
 }
 
-static inline bool qwtIsClippingNeeded( 
+static inline bool qwtIsClippingNeeded(
     const QPainter *painter, QRectF &clipRect )
 {
     bool doClipping = false;
@@ -119,7 +120,7 @@ static inline void qwtDrawPolyline( QPainter *painter,
                 if ( painter->renderHints() & QPainter::Antialiasing )
                 {
                     /*
-                        all versions <= 4.7 have issues with 
+                        all versions <= 4.7 have issues with
                         antialiased lines
                      */
 
@@ -265,7 +266,7 @@ bool QwtPainter::isAligning( QPainter *painter )
 {
     if ( painter && painter->isActive() )
     {
-        const QPaintEngine::Type type = 
+        const QPaintEngine::Type type =
             painter->paintEngine()->type();
 
         if ( type >= QPaintEngine::User )
@@ -1423,7 +1424,7 @@ QPixmap QwtPainter::backingStore( QWidget *widget, const QSize &size )
 {
     QPixmap pm;
 
-#if QT_VERSION >= 0x050000 
+#if QT_VERSION >= 0x050000
     const qreal pixelRatio = QwtPainter::devicePixelRatio( widget );
 
     pm = QPixmap( size * pixelRatio );

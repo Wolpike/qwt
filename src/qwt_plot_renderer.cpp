@@ -18,6 +18,7 @@
 #include "qwt_text_label.h"
 #include "qwt_math.h"
 #include <qpainter.h>
+#include <qpainterpath.h>
 #include <qpaintengine.h>
 #include <qtransform.h>
 #include <qprinter.h>
@@ -286,8 +287,8 @@ void QwtPlotRenderer::renderDocument( QwtPlot *plot,
         pdfWriter.setPageSizeMM( sizeMM );
         pdfWriter.setTitle( title );
         pdfWriter.setPageMargins( QMarginsF() );
-        pdfWriter.setResolution( resolution ); 
-        
+        pdfWriter.setResolution( resolution );
+
         QPainter painter( &pdfWriter );
         render( plot, &painter, documentRect );
 #else

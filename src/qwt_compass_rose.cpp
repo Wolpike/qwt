@@ -11,8 +11,9 @@
 #include "qwt_point_polar.h"
 #include "qwt_painter.h"
 #include <qpainter.h>
+#include <qpainterpath.h>
 
-static QPointF qwtIntersection( 
+static QPointF qwtIntersection(
     QPointF p11, QPointF p12, QPointF p21, QPointF p22 )
 {
     const QLineF line1( p11, p12 );
@@ -34,18 +35,18 @@ QwtCompassRose::QwtCompassRose()
 QwtCompassRose::~QwtCompassRose()
 {
 }
-    
+
 //! Assign a palette
 void QwtCompassRose::setPalette( const QPalette &p )
 {
     d_palette = p;
-}   
-    
+}
+
 //! \return Current palette
 const QPalette &QwtCompassRose::palette() const
 {
     return d_palette;
-}   
+}
 
 class QwtSimpleCompassRose::PrivateData
 {
@@ -234,7 +235,7 @@ void QwtSimpleCompassRose::setWidth( double width )
         d_data->width = 0.4;
 }
 
-/*! 
+/*!
   \return Width of the rose
   \sa setWidth()
  */
